@@ -1,20 +1,133 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Typing Test</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Typing Test</h1>
-        <p id="sentence"></p>
-        <textarea id="input" rows="5" cols="50" placeholder="Start typing here..."></textarea>
-        <button id="start-btn">Start</button>
-        <button id="reset-btn">Reset</button>
-        <p id="result"></p>
-    </div>
 
-    <script src="script.js"></script>
-</body>
+  <head>
+    <title> Intense Typer</title>
+    <style>
+      body {
+        font-family: Impact, sans-serif;
+        background-image: url("https://cdn.pixabay.com/photo/2015/09/18/14/37/video-game-948906_1280.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #fff;
+        text-align: center;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        resize: none;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+      }
+
+      p {
+        margin: 10px 0;
+        font-size: 18px;
+        color: #fff;
+        font-weight: bold;
+      }
+
+      #wordCount,
+      #timeElapsed,
+      #wpm {
+        font-weight: bold;
+        color: #ffcc00;
+      }
+
+      .info {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .restart-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        font-size: 16px;
+        border: none;
+        border-radius: 4px;
+        color: #fff;
+        background-color: #ffcc00;
+        transition: background-color 1s;
+      }
+
+      .restart-btn:hover {
+        background-color: #ff6600;
+      }
+
+    </style>
+    <script>
+      // Function to update the word count
+      function updateWordCount() {
+        var text = document.getElementById("myText").value;
+        var words = text.split(" ").filter(function(el) {
+          return el.length !== 0;
+        }).length;
+
+        var timeElapsed = parseFloat(document.getElementById("timeElapsed").innerHTML);
+        var wpm = Math.round(words / (timeElapsed / 60));
+
+        document.getElementById("wordCount").innerHTML = words;
+        document.getElementById("wpm").innerHTML = wpm;
+      }
+
+      // Function to start the timer
+      function startTimer() {
+        var start = new Date().getTime();
+        setInterval(function() {
+          var timeElapsed = ((new Date().getTime() - start) / 1000).toFixed(1);
+          document.getElementById("timeElapsed").innerHTML = timeElapsed;
+        }, 100);
+      }
+
+      // Function to restart the word counter
+      function restart() {
+        document.getElementById("myText").value = "";
+        document.getElementById("wordCount").innerHTML = "0";
+        document.getElementById("timeElapsed").innerHTML = "0.0";
+        document.getElementById("wpm").innerHTML = "0";
+      }
+
+      // Function to change the button color every second
+      function changeButtonColor() {
+        var button = document.getElementById("restartBtn");
+        setInterval(function() {
+          button.style.backgroundColor = getRandomColor();
+        }, 1000);
+      }
+
+      // Function to generate random color
+      function getRandomColor() {
+        var letters = "0123456789ABCDEF";
+        var color = "#";
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+    </script>
+  </head>
+
+  <body onload="changeButtonColor()">
+    <div class="info">
+      <h1>Gaming Word Counter</h1>
+      <textarea id="myText" rows="10" cols="50" onkeyup="updateWordCount()" onclick="startTimer()"></textarea>
+      <br>
+      <p>Word Count: <span id="wordCount">0</span></p>
+      <p>Total Time Elapsed (seconds): <span id="timeElapsed">0.0</span></p>
+      <p>Words per Minute (WPM): <span id="wpm">0</span></p>
+      <button id="restartBtn" class="restart-btn" onclick="restart()">Restart</button>
+    </div>
+  </body>
+
 </html>
